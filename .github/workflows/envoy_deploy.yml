@@ -1,0 +1,34 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  laravel-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Install envoyer
+      run: composer global require laravel/envoy
+    - name: Make envoyer executeable
+      run: chmod +x ~/.composer/vendor/bin/envoy
+    - name: move envoy
+      run: ln -s ~/.composer/vendor/bin/envoy /usr/bin/envoy
+    - name: setting ssh
+      run: | 
+         'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+         eval $(ssh-agent -s)
+         ssh-add <(echo "$SSH_PRIVATE_KEY")
+         mkdir -p ~/.ssh
+         '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+    
