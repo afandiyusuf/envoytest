@@ -22,12 +22,9 @@ jobs:
     - name: Make envoyer executeable
       run: chmod +x ~/.composer/vendor/bin/envoy
     - name: setting ssh
-      run: | 
-         'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-         eval $(ssh-agent -s)
-         ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
-         mkdir -p ~/.ssh
-         '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - uses: webfactory/ssh-agent@v0.4.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: run envoy
       run: |
         ~/.composer/vendor/bin/envoy run deploy_production
