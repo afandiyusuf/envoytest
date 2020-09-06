@@ -3,7 +3,7 @@
 @setup
     $repository = 'git@github.com:afandiyusuf/envoytest.git';
     $releases_dir = '/var/www/envoytest';
-    $staging_dir = '/var/www/envoytest';
+    $staging_dir = '/var/www/envoytest2';
 @endsetup
 
 @story('deploy_staging')
