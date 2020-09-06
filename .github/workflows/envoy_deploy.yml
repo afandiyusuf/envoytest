@@ -21,14 +21,15 @@ jobs:
       run: composer global require laravel/envoy
     - name: Make envoyer executeable
       run: chmod +x ~/.composer/vendor/bin/envoy
-    - name: move envoy
-      run: ln -s ~/.composer/vendor/bin/envoy /usr/bin/envoy
     - name: setting ssh
       run: | 
          'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
          eval $(ssh-agent -s)
-         ssh-add <(echo "$SSH_PRIVATE_KEY")
+         ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
          mkdir -p ~/.ssh
          '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - name: run envoy
+      run: |
+        ~/.composer/vendor/bin/envoy run deploy_production
 
     
