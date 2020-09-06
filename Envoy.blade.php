@@ -12,7 +12,7 @@
     start_develop_nuxt
 @endstory
 
-@story('deploy_release')
+@story('deploy_production')
     clone_repository_release
 @endstory
 
