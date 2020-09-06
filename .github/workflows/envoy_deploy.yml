@@ -21,8 +21,6 @@ jobs:
       run: composer global require laravel/envoy
     - name: Make envoyer executeable
       run: chmod +x ~/.composer/vendor/bin/envoy
-    - name: move envoy
-      run: ln -s ~/.composer/vendor/bin/envoy /usr/bin/envoy
     - uses: webfactory/ssh-agent@v0.4.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
